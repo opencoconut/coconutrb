@@ -4,19 +4,19 @@
 
 In a Rails application, add this line to `Gemfile`:
 
-``` language-ruby
+```ruby
 gem 'coconutrb', '~> 2.2.0'
 ```
 
 And then, type in your terminal:
 
-``` language-console
+```console
 bundle install
 ```
 
 You can also install it via rubygems:
 
-``` language-console
+```console
 sudo gem install coconutrb
 ```
 
@@ -26,7 +26,7 @@ Use the [API Request Builder](https://app.coconut.co/job/new) to generate a conf
 
 Example of `coconut.conf`:
 
-``` language-hw
+```ini
 var s3 = s3://accesskey:secretkey@mybucket
 
 set webhook = http://mysite.com/webhook/coconut?videoId=$vid
@@ -38,7 +38,7 @@ set webhook = http://mysite.com/webhook/coconut?videoId=$vid
 
 Here is the ruby code to submit the config file:
 
-``` language-ruby
+```ruby
 # We specify the config file, set the source of the video to convert and
 # create a variable "vid" that will be used in the custom webhook URL and output URLs
 job = Coconut::Job.create(
@@ -58,7 +58,7 @@ end
 
 You can also create a job without a config file. To do that you will need to give every settings in the method parameters. Here is the exact same job but without a config file:
 
-``` language-ruby
+```ruby
 vid = 1234
 s3 = "s3://accesskey:secretkey@mybucket"
 
