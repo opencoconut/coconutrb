@@ -29,7 +29,7 @@ Example of `coconut.conf`:
 ``` language-hw
 var s3 = s3://accesskey:secretkey@mybucket
 
-set webhook = http://mysite.com/webhook/Coconut?videoId=$vid
+set webhook = http://mysite.com/webhook/coconut?videoId=$vid
 
 -> mp4  = $s3/videos/video_$vid.mp4
 -> webm = $s3/videos/video_$vid.webm
@@ -54,6 +54,24 @@ else
   puts job["error_code"]
   puts job["error_message"]
 end
+```
+
+You can also create a job without a config file. To do that you will need to give every settings in the method parameters. Here is the exact same job but without a config file:
+
+``` language-ruby
+vid = 1234
+s3 = "s3://accesskey:secretkey@mybucket"
+
+job = Coconut::Job.create(
+  :api_key => "k-api-key",
+  :source  => "http://yoursite.com/media/video.mp4",
+  :webhook => "http://mysite.com/webhook/coconut?videoId=#{vid}",
+  :outputs => {
+    "mp4" => "#{s3}/videos/video_#{vid}.mp4",
+    "webm" => "#{s3}/videos/video_#{vid}.webm",
+    "jpg_300x" => "#{s3}/previews/thumbs_#num#.jpg, number=3"
+  }
+)
 ```
 
 Note that you can use the environment variable `COCONUT_API_KEY` to set your API key.
