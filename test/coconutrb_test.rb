@@ -83,6 +83,56 @@ class CoconutTest < Test::Unit::TestCase
     assert_equal generated, config
   end
 
+  def test_generate_config_with_no_file_and_multiple_same_typed_outputs
+    base_conf = {
+      :vars => {
+        :vid => 1234,
+        :user => 5098,
+        :s3 => "s3://a:s@bucket"
+      },
+      :source => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook?vid=$vid&user=$user",
+    }
+
+    output_without_prefix =  { :outputs => {
+      "hls" => "$s3/playlist.m3u8, variants=hls:240p,hls:360p",
+    } }
+
+    outputs_with_num_prefix =  { :outputs => {
+      "2@hls" => "$s3/playlist.m3u8, variants=hls:480p,hls:720p, if=$source_height > 300",
+      "1@hls" => "$s3/playlist.m3u8, variants=hls:240p,hls:360p, if=$source_height < 300",
+    } }
+
+    outputs_with_az_prefix =  { :outputs => {
+      "cd@hls" => "$s3/playlist.m3u8, variants=hls:480p,hls:720p, if=$source_height > 300",
+      "ad@hls" => "$s3/playlist.m3u8, variants=hls:240p,hls:360p, if=$source_height < 300",
+    } }
+
+    config_no_prefix = Coconut.config(base_conf.merge(output_without_prefix))
+    config_num = Coconut.config(base_conf.merge(outputs_with_num_prefix))
+    config_az = Coconut.config(base_conf.merge(outputs_with_az_prefix))
+
+    generated_base = [
+      "var s3 = s3://a:s@bucket",
+      "var user = 5098",
+      "var vid = 1234",
+      "",
+      "set source = https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      "set webhook = http://mysite.com/webhook?vid=$vid&user=$user",
+      "",
+    ]
+
+    generated_no_prefix = generated_base.dup.push("-> hls = $s3/playlist.m3u8, variants=hls:240p,hls:360p").join("\n")
+
+    generated_with_prefix = generated_base.dup.push("-> hls = $s3/playlist.m3u8, variants=hls:240p,hls:360p, if=$source_height < 300",
+                                            "-> hls = $s3/playlist.m3u8, variants=hls:480p,hls:720p, if=$source_height > 300").join("\n")
+
+    assert_equal generated_no_prefix, config_no_prefix
+    assert_equal generated_with_prefix, config_num
+    assert_equal generated_with_prefix, config_az
+
+  end
+
   def test_generate_config_with_file
     File.open("coconut.conf", "w") {|f| f.write("var s3 = s3://a:s@bucket/video\nset webhook = http://mysite.com/webhook?vid=$vid&user=$user\n-> mp4 = $s3/$vid.mp4")}
 
