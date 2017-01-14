@@ -69,7 +69,7 @@ module Coconut
     new_conf << ""
     new_conf.concat conf.select{|l| l.start_with?("set")}.sort
     new_conf << ""
-    new_conf.concat conf.select{|l| l.start_with?("->")}.sort
+    new_conf.concat conf.select{|l| l.start_with?("->")}.sort.map{ |output| output.sub /^(->\s+)[\w\d]+?@/, '\1' }
 
     return new_conf.join("\n")
   end
