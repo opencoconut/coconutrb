@@ -131,4 +131,21 @@ class CoconutTest < Test::Unit::TestCase
     assert_equal "error", job["status"]
     assert_equal "authentication_failed", job["error_code"]
   end
+
+  def test_get_job_info
+    conf = Coconut.config(
+      :source  => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook",
+      :outputs => {:mp4 => "s3://a:s@bucket/video.mp4"}
+    )
+
+    job = Coconut.submit(conf)
+
+    info = Coconut::Job.get(job["id"])
+    assert_equal info["id"], job["id"]
+  end
+
+  def test_get_not_found_job_returns_nil
+    assert_nil Coconut::Job.get(1000)
+  end
 end

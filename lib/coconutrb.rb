@@ -35,6 +35,25 @@ module Coconut
     end
   end
 
+  def self.get(path, api_key=nil)
+    api_key ||= API_KEY
+    uri = URI("#{COCONUT_URL}#{path}")
+    headers = {"User-Agent" => USER_AGENT, "Content-Type" => "text/plain", "Accept" => "application/json"}
+
+    req = Net::HTTP::Get.new(uri.path, headers)
+    req.basic_auth api_key, ''
+
+    response = Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme.include?("https")) do |http|
+      http.request(req)
+    end
+
+    if response.code.to_i != 200
+      return nil
+    else
+      return MultiJson.decode(response.body)
+    end
+  end
+
   def self.config(options={})
     if conf_file = options[:conf]
       raise Error, "Config file `#{conf_file}' not found" if ! File.exists?(conf_file)
@@ -77,6 +96,10 @@ module Coconut
   class Job
     def self.create(options={})
       Coconut.submit(Coconut.config(options), options[:api_key])
+    end
+
+    def self.get(jid, api_key=nil)
+      Coconut.get("/v1/jobs/#{jid}", api_key)
     end
   end
 end

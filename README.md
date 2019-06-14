@@ -74,6 +74,14 @@ job = Coconut::Job.create(
 )
 ```
 
+Getting info about a job:
+
+```ruby
+Coconut::Job.get(18370773)
+
+{"id"=>18370773, "created_at"=>"2019-06-11 12:04:53 +0000", "completed_at"=>"2019-06-11 12:12:03 +0000", "status"=>"completed", "progress"=>"100%", "errors"=>{}, "output_urls"=>{"httpstream"=>{"dash"=>"http://media.coconut.cos3.amazonaws.com/bbb/dash/master.mpd", "hls"=>"http://media.coconut.cos3.amazonaws.com/bbb/hls/master.m3u8", "hlsfmp4"=>"http://media.coconut.cos3.amazonaws.com/bbb/dash/master.m3u8"}, "mp4:720p"=>"http://media.coconut.cos3.amazonaws.com/bbb/720p.mp4", "mp4:1080p"=>"http://media.coconut.cos3.amazonaws.com/bbb/1080p.mp4"}}
+```
+
 Note that you can use the environment variable `COCONUT_API_KEY` to set your API key.
 
 ## Contributing
