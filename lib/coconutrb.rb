@@ -6,7 +6,7 @@ module Coconut
   class Error < RuntimeError; end
 
   COCONUT_URL = ENV["COCONUT_URL"] || "https://api.coconut.co"
-  USER_AGENT = "Coconut/2.2.0 (Ruby)"
+  USER_AGENT = "Coconut/2.4.0 (Ruby)"
 
   API_KEY = ENV["COCONUT_API_KEY"] unless const_defined?(:COCONUT_API_KEY)
 

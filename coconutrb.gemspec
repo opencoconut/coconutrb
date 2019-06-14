@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'coconutrb'
-  s.version     = '2.2.0'
+  s.version     = '2.4.0'
   s.summary     = "Client library to transcode videos with coconut.co"
   s.description = "Official client library to transcode videos with coconut cloud service"
   s.authors     = ["Bruno Celeste"]
