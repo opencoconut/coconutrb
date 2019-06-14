@@ -168,4 +168,32 @@ class CoconutTest < Test::Unit::TestCase
 
     assert_equal generated, config
   end
+
+  def test_get_all_metadata
+    conf = Coconut.config(
+      :source  => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook",
+      :outputs => {:mp4 => "s3://a:s@bucket/video.mp4"}
+    )
+
+    job = Coconut.submit(conf)
+    sleep 4
+
+    metadata = Coconut::Job.get_all_metadata(job["id"])
+    assert_not_nil metadata
+  end
+
+  def test_get_metadata_for_source
+    conf = Coconut.config(
+      :source  => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook",
+      :outputs => {:mp4 => "s3://a:s@bucket/video.mp4"}
+    )
+
+    job = Coconut.submit(conf)
+    sleep 4
+
+    metadata = Coconut::Job.get_metadata_for(job["id"], :source)
+    assert_not_nil metadata
+  end
 end

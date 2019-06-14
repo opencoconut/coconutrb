@@ -105,5 +105,13 @@ module Coconut
     def self.get(jid, api_key=nil)
       Coconut.get("/v1/jobs/#{jid}", api_key)
     end
+
+    def self.get_all_metadata(jid, api_key=nil)
+      Coconut.get("/v1/metadata/jobs/#{jid}", api_key)
+    end
+
+    def self.get_metadata_for(jid, source_or_output, api_key=nil)
+      Coconut.get("/v1/metadata/jobs/#{jid}/#{source_or_output}", api_key)
+    end
   end
 end
