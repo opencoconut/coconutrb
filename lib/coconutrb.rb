@@ -76,6 +76,10 @@ module Coconut
       conf << "set webhook = #{webhook}"
     end
 
+    if api_version = options[:api_version]
+      conf << "set api_version = #{api_version}"
+    end
+
     if outputs = options[:outputs]
       outputs.each do |format, cdn|
         conf << "-> #{format} = #{cdn}"

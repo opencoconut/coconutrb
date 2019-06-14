@@ -148,4 +148,24 @@ class CoconutTest < Test::Unit::TestCase
   def test_get_not_found_job_returns_nil
     assert_nil Coconut::Job.get(1000)
   end
+
+  def test_set_api_version
+    config = Coconut.config({
+      :api_version => "beta",
+      :source => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook?vid=$vid&user=$user",
+      :outputs => {"mp4" => "$s3/vid.mp4"}
+    })
+
+    generated = [
+      "",
+      "set api_version = beta",
+      "set source = https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      "set webhook = http://mysite.com/webhook?vid=$vid&user=$user",
+      "",
+      "-> mp4 = $s3/vid.mp4",
+    ].join("\n")
+
+    assert_equal generated, config
+  end
 end
