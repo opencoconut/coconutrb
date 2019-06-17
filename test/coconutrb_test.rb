@@ -17,7 +17,7 @@ class CoconutTest < Test::Unit::TestCase
     )
 
     job = Coconut.submit(conf)
-    assert_equal "ok", job["status"]
+    assert_equal "processing", job["status"]
     assert job["id"] > 0
   end
 
@@ -116,7 +116,7 @@ class CoconutTest < Test::Unit::TestCase
       :source => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
       :vars => {:vid => 1234, :user => 5098}
     )
-    assert_equal "ok", job["status"]
+    assert_equal "processing", job["status"]
     assert job["id"] > 0
 
     File.delete("coconut.conf")
@@ -195,5 +195,37 @@ class CoconutTest < Test::Unit::TestCase
 
     metadata = Coconut::Job.get_metadata_for(job["id"], :source)
     assert_not_nil metadata
+  end
+
+  def test_cdn_parameters_as_hash
+    conf = Coconut.config(
+      :source  => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => "http://mysite.com/webhook",
+      :outputs => {:"jpg:300x" => {:url => "s3://a:s@bucket/thumbs_#num#.jpg", :number => 10} }
+    )
+
+    generated = [
+      "",
+      "set source = https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      "set webhook = http://mysite.com/webhook?vid=$vid&user=$user",
+      "",
+      "-> jpg:300x = s3://a:s@bucket/thumbs_#num#.jpg, number=10"
+    ].join("\n")
+  end
+
+  def test_webhook_parameters_as_hash
+    conf = Coconut.config(
+      :source  => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      :webhook => {:url => "http://mysite.com/webhook", :metadata => true},
+      :outputs => {:mp4 => "s3://a:s@bucket/video.mp4"}
+    )
+
+    generated = [
+      "",
+      "set source = https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
+      "set webhook = http://mysite.com/webhook?vid=$vid&user=$user, metadata=true",
+      "",
+      "-> mp4 = s3://a:s@bucket/video.mp4"
+    ].join("\n")
   end
 end

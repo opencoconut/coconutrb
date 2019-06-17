@@ -73,6 +73,10 @@ module Coconut
     end
 
     if webhook = options[:webhook]
+      if webhook.is_a?(Hash)
+        webhook = hash_params_to_string(webhook)
+      end
+
       conf << "set webhook = #{webhook}"
     end
 
@@ -82,6 +86,10 @@ module Coconut
 
     if outputs = options[:outputs]
       outputs.each do |format, cdn|
+        if cdn.is_a?(Hash)
+          cdn = hash_params_to_string(cdn)
+        end
+
         conf << "-> #{format} = #{cdn}"
       end
     end
@@ -95,6 +103,16 @@ module Coconut
     new_conf.concat conf.select{|l| l.start_with?("->")}.sort
 
     return new_conf.join("\n")
+  end
+
+  def self.hash_params_to_string(params)
+    params.map{|k,v|
+      if k.to_s == "url"
+        "#{v}"
+      else
+        "#{k}=#{v}"
+      end
+    }.join(", ")
   end
 
   class Job

@@ -69,7 +69,7 @@ job = Coconut::Job.create(
   :outputs => {
     "mp4" => "#{s3}/videos/video_#{vid}.mp4",
     "webm" => "#{s3}/videos/video_#{vid}.webm",
-    "jpg:300x" => "#{s3}/previews/thumbs_#num#.jpg, number=3"
+    "jpg:300x" => {:url => "#{s3}/previews/thumbs_#num#.jpg", :number => 3}
   }
 )
 ```
