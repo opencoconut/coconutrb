@@ -48,8 +48,8 @@ job = Coconut::Job.create(
   :vars    => {:vid => 1234}
 )
 
-if job["status"] == "ok"
-  puts job["id"]
+if jid = job["id"]
+  puts jid
 else
   puts job["error_code"]
   puts job["error_message"]
