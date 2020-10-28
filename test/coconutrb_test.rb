@@ -17,8 +17,8 @@ class CoconutTest < Test::Unit::TestCase
     )
 
     job = Coconut.submit(conf)
-    assert_equal "processing", job["status"]
-    assert job["id"] > 0
+    assert_equal("processing", job["status"])
+    assert(job["id"] > 0)
   end
 
   def test_submit_bad_config_should_raise
@@ -37,8 +37,8 @@ class CoconutTest < Test::Unit::TestCase
     )
 
     job = Coconut.submit(conf, "k-4d204a7fd1fc67fc00e87d3c326d9b75")
-    assert_equal "error", job["status"]
-    assert_equal "authentication_failed", job["error_code"]
+    assert_equal("Authentication failed, check your API key", job["error"])
+    assert_equal("authentication_failed", job["error_code"])
   end
 
   def test_submit_bad_config_should_not_raise
@@ -47,8 +47,9 @@ class CoconutTest < Test::Unit::TestCase
     )
 
     job = Coconut.submit(conf)
-    assert_equal "error", job["status"]
-    assert_equal "config_not_valid", job["error_code"]
+    assert_equal("400", job['status'])
+    assert_equal("The config file must specify the `source' video location, a `webhook` URL and at least 1 output", job["error"])
+    assert_equal("config_not_valid", job["error_code"])
   end
 
   def test_generate_full_config_with_no_file
@@ -80,7 +81,7 @@ class CoconutTest < Test::Unit::TestCase
       "-> webm = $s3/vid.webm"
     ].join("\n")
 
-    assert_equal generated, config
+    assert_equal(generated, config)
   end
 
   def test_generate_config_with_file
@@ -103,7 +104,7 @@ class CoconutTest < Test::Unit::TestCase
       "-> mp4 = $s3/$vid.mp4",
     ].join("\n")
 
-    assert_equal generated, config
+    assert_equal(generated, config)
 
     File.delete("coconut.conf")
   end
@@ -116,8 +117,8 @@ class CoconutTest < Test::Unit::TestCase
       :source => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
       :vars => {:vid => 1234, :user => 5098}
     )
-    assert_equal "processing", job["status"]
-    assert job["id"] > 0
+    assert_equal("processing", job["status"])
+    assert(job["id"] > 0)
 
     File.delete("coconut.conf")
   end
@@ -127,9 +128,9 @@ class CoconutTest < Test::Unit::TestCase
       :api_key => "k-4d204a7fd1fc67fc00e87d3c326d9b75",
       :source => "https://s3-eu-west-1.amazonaws.com/files.coconut.co/test.mp4",
     )
-
-    assert_equal "error", job["status"]
-    assert_equal "authentication_failed", job["error_code"]
+    assert_equal("401", job["status"])
+    assert_equal("Authentication failed, check your API key", job["error"])
+    assert_equal("authentication_failed", job["error_code"])
   end
 
   def test_get_job_info
@@ -142,11 +143,13 @@ class CoconutTest < Test::Unit::TestCase
     job = Coconut.submit(conf)
 
     info = Coconut::Job.get(job["id"])
-    assert_equal info["id"], job["id"]
+    assert_equal(info["id"], job["id"])
   end
 
   def test_get_not_found_job_returns_nil
-    assert_nil Coconut::Job.get(1000)
+    job = Coconut::Job.get(1000)
+    assert_equal('404', job['status'])
+    assert_equal('compile error', job['error'])
   end
 
   def test_set_api_version
@@ -166,7 +169,7 @@ class CoconutTest < Test::Unit::TestCase
       "-> mp4 = $s3/vid.mp4",
     ].join("\n")
 
-    assert_equal generated, config
+    assert_equal(generated, config)
   end
 
   def test_get_all_metadata
@@ -180,7 +183,7 @@ class CoconutTest < Test::Unit::TestCase
     sleep 4
 
     metadata = Coconut::Job.get_all_metadata(job["id"])
-    assert_not_nil metadata
+    assert_not_nil(metadata)
   end
 
   def test_get_metadata_for_source
@@ -194,7 +197,7 @@ class CoconutTest < Test::Unit::TestCase
     sleep 4
 
     metadata = Coconut::Job.get_metadata_for(job["id"], :source)
-    assert_not_nil metadata
+    assert_not_nil(metadata)
   end
 
   def test_cdn_parameters_as_hash
