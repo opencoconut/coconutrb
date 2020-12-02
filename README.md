@@ -75,7 +75,7 @@ Coconut::Job.retrieve("OolQXaiU86NFki")
 Coconut::Metadata.retrieve("OolQXaiU86NFki")
 
 # Retrieve metadata for a specific output
-Coconut::Metadata.retrieve("OolQXaiU86NFki", "mp4:1080p")
+Coconut::Metadata.retrieve("OolQXaiU86NFki", key: "mp4:1080p")
 ```
 
 ## Per-request configuration
