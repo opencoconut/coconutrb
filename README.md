@@ -32,7 +32,7 @@ bundle install
 
 ## Usage
 
-The library needs you to set your API key which can be found in your [dashboard](https://app.coconut.co/api). Webhook URL and storage settings are optional but really useful so you won't need to add them each time you create a job.
+The library needs you to set your API key which can be found in your [dashboard](https://app.coconut.co/api). Webhook URL and storage settings are optional but are very convenient because you set them only once.
 
 ```ruby
 Coconut.api_key = 'k-api-key'
@@ -86,4 +86,3 @@ Coconut::Job.create(job, client: cli)
 ```
 
 *Released under the [MIT license](http://www.opensource.org/licenses/mit-license.php).*
----
