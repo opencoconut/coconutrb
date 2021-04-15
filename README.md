@@ -45,6 +45,7 @@ Coconut.notification = {
 Coconut.storage = {
   service: "s3",
   bucket: "my-bucket",
+  region: "us-east-1",
   credentials: {
     access_key_id: "access-key",
       secret_access_key: "secret-key"
@@ -78,8 +79,6 @@ Coconut::Job.retrieve("OolQXaiU86NFki")
 ```ruby
 Coconut::Metadata.retrieve("OolQXaiU86NFki")
 
-# Retrieve metadata for a specific output
-Coconut::Metadata.retrieve("OolQXaiU86NFki", key: "mp4:1080p")
 ```
 
 ## Per-request configuration
