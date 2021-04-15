@@ -1,0 +1,4 @@
+.DS_Store
+.testenv
+run_tests
+*.gem
