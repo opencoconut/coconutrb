@@ -36,7 +36,11 @@ The library needs you to set your API key which can be found in your [dashboard]
 
 ```ruby
 Coconut.api_key = 'k-api-key'
-Coconut.webhook_url = "https://yoursite/api/coconut/webhook"
+
+Coconut.notification = {
+  type: "http",
+  url: "https://yoursite/api/coconut/webhook"
+}
 
 Coconut.storage = {
   service: "s3",

@@ -26,9 +26,9 @@ module Coconut
     end
 
     def self.apply_settings(job)
-      if url = Coconut.webhook_url
-        job[:webhook] ||= {}
-        job[:webhook][:url] = url
+      if notification = Coconut.notification
+        job[:notification] ||= {}
+        job[:notification].merge!(notification)
       end
 
       if storage = Coconut.storage

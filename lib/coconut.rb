@@ -32,12 +32,12 @@ module Coconut
     @endpoint
   end
 
-  def self.webhook_url=(url)
-    @webhook_url = url
+  def self.notification=(notification)
+    @notification = notification
   end
 
-  def self.webhook_url
-    @webhook_url
+  def self.notification
+    @notification
   end
 
   def self.storage=(storage)
