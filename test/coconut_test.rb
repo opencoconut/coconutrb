@@ -1,7 +1,7 @@
 $LOAD_PATH.unshift(::File.join(::File.dirname(__FILE__), "..", "lib"))
 
 require "test/unit"
-require "coconut"
+require "coconutrb"
 
 class CoconutTest < Test::Unit::TestCase
   INPUT_URL = "https://s3-eu-west-1.amazonaws.com/files.coconut.co/bbb_800k.mp4"
