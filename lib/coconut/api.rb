@@ -32,7 +32,7 @@ module Coconut
         end
       end
 
-      return resp.parse
+      return resp.parse(:json)
     end
   end
 end
